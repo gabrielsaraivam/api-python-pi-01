@@ -55,6 +55,7 @@ def captura_dados():
     fk_maquina.append(fk_maquina_atual)
     
     exibir_dados(cpu_percent, mem_percent, disk_percent, numero_tarefas_ativas, usuario_logado, fk_maquina_atual)
+    flush(cpu, memory, disk, numero_tarefas, usuario, fk_maquina)
     intervalo_captura(cpu_percent, mem_percent, disk_percent)
     
 
@@ -80,7 +81,6 @@ def intervalo_captura(cpu_percent, mem_percent, disk_percent):
     if ((cpu_percent >= 80 or mem_percent >= 50 or disk_percent >= 70) and contador_alerta < 3):
         contador_alerta += 1
         tempo_atual = 15
-        time.sleep(14)
         print("-"*50, "\n")
         print(f"\n\nAlerta Nível 1, máquina {fk_maq} enviado\n\n")
         print("-"*50, "\n")
@@ -91,6 +91,8 @@ def intervalo_captura(cpu_percent, mem_percent, disk_percent):
             mailer(assunto, texto)
         except:
             print('Deu erro')
+            
+        time.sleep(14)
 
 
     elif ((cpu_percent >= 80 or mem_percent >= 50 or disk_percent >= 70) and contador_alerta >= 3):
@@ -134,7 +136,6 @@ try:
 
             captura_dados()
             count_lista = count_lista + 1
-            flush(cpu, memory, disk, numero_tarefas, usuario, fk_maquina)
 
             fk_maq = fk_maq + 1
 
@@ -143,4 +144,3 @@ try:
 except KeyboardInterrupt:
     pass
 
-flush(cpu, memory, disk, numero_tarefas, usuario, fk_maquina)
